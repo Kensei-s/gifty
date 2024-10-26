@@ -1,0 +1,11 @@
+<form method="post" action="{{ path('app_gift_list_delete', {'id': gift_list.id}) }}" onsubmit="return confirm('Confirmez vous la suppression ?');"  class="m-2">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ gift_list.id) }}">
+
+{#    <button class="btn"></button>#}
+
+
+    <button class="btn p-0 text-red-500 hover:text-red-600">
+        <i class="fa-solid fa-trash fa-xl"></i>
+        {#Delete#}
+    </button>
+</form>

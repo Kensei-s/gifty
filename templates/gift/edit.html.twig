@@ -1,0 +1,27 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Modifier le cadeau{% endblock %}
+
+{% block body %}
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <h1 class="text-2xl font-bold text-center mb-6">Modifier le cadeau</h1>
+
+            <!-- Formulaire d'édition du cadeau -->
+            {{ include('gift/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+            <!-- Boutons -->
+            <div class="flex justify-between mt-6">
+                <!-- Bouton retour à la liste -->
+                <a href="{{ path('app_gift_list_show', {'id': giftListId}) }}" class="inline-flex items-center px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg shadow hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
+                    Retour à la liste
+                </a>
+
+                <!-- Bouton supprimer -->
+                <div class="inline-flex items-center">
+                    {{ include('gift/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

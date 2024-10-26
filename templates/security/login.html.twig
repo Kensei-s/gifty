@@ -1,0 +1,61 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Se connecter{% endblock %}
+
+{% block body %}
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <form method="post" class="space-y-6">
+
+                {% if error %}
+                    <div class="bg-red-100 text-red-700 px-4 py-3 rounded">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3 text-center">
+                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="text-blue-600 hover:underline">Deconnexion</a>
+                    </div>
+                {% endif %}
+
+                <h1 class="text-2xl font-bold text-center">Se connecter</h1>
+
+                <!-- Email Input -->
+                <div>
+                    <label for="inputEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" autocomplete="email" required autofocus>
+                </div>
+
+                <!-- Password Input -->
+                <div>
+                    <label for="inputPassword" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                    <input type="password" name="password" id="inputPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" autocomplete="current-password" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <!-- Remember Me -->
+                <div class="flex items-center">
+                    <input type="checkbox" name="_remember_me" id="remember_me" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="remember_me" class="ml-2 block text-sm text-gray-900">Rester connecter</label>
+                </div>
+
+                <!-- Forgot Password -->
+                <div class="text-right">
+                    <a href="{{ path('app_forgot_password_request') }}" class="text-blue-600 hover:underline">Mot de passe oublié ?</a>
+                </div>
+
+                <!-- Submit Button -->
+                <button class="w-full bg-blue-900 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" type="submit">
+                   Connexion
+                </button>
+
+                <!-- Register Link -->
+                <div class="text-center">
+                    Nouveau ? <a href="{{ path('app_register') }}" class="text-blue-600 hover:underline">Inscription</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

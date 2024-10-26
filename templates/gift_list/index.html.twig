@@ -1,0 +1,69 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Mes Listes de Cadeaux{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <h1 class="text-3xl font-bold mb-6">Mes Listes de Cadeaux</h1>
+
+        <!-- Bouton pour créer une nouvelle liste -->
+        <a href="{{ path('app_gift_list_new') }}" class="inline-flex items-center px-4 py-2 bg-blue-900 text-white font-semibold rounded-lg shadow hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-4">
+            Créer une nouvelle liste
+            <i class="fa-solid fa-square-plus fa-xl ml-2"></i>
+        </a>
+
+        <!-- Tableau des listes de cadeaux -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                <thead class="bg-gray-100 text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-left">Titre</th>
+                        <th class="px-4 py-2 text-left">Description</th>
+                        <th class="px-4 py-2 text-left">Image</th>
+                        <th class="px-4 py-2 text-left">Statut</th>
+                        <th class="px-4 py-2 text-left">Mot de passe</th>
+                        <th class="px-4 py-2 text-left">Date de début</th>
+                        <th class="px-4 py-2 text-left">Date de fin</th>
+                        <th class="px-4 py-2 text-left">Thème</th>
+                        <th class="px-4 py-2 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                    {% for gift_list in gift_lists %}
+                        <tr class="border-b border-gray-200">
+                            <td class="px-4 py-2">{{ gift_list.title }}</td>
+                            <td class="px-4 py-2">{{ gift_list.description }}</td>
+                            <td class="px-4 py-2">
+                                {% if gift_list.image is null or gift_list.image == '' %}
+                                    <i class="fa-solid fa-gift fa-xl text-gray-500"></i>
+                                {% else %}
+                                    <img src="{{ asset('uploads/giftlists/' ~ gift_list.image) }}" alt="Image du cadeau" class="h-10 w-10 rounded-full object-cover">
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-2">{{ gift_list.status ? 'Privée' : 'Publique' }}</td>
+                            <td class="px-4 py-2">{{ gift_list.password ? '*****' : 'Aucun' }}</td>
+                            <td class="px-4 py-2">{{ gift_list.beginDate ? gift_list.beginDate|date('Y-m-d') : '' }}</td>
+                            <td class="px-4 py-2">{{ gift_list.endDate ? gift_list.endDate|date('Y-m-d') : '' }}</td>
+                            <td class="px-4 py-2">{{ gift_list.theme }}</td>
+                            <td class="px-4 py-2">
+                                <div class="flex space-x-4">
+                                    <a href="{{ path('app_gift_list_show', {'id': gift_list.id}) }}" class="text-blue-600 hover:text-blue-900">
+                                        <i class="fa-solid fa-circle-info fa-lg"></i>
+                                    </a>
+                                    <a href="{{ path('app_gift_list_edit', {'id': gift_list.id}) }}" class="text-yellow-500 hover:text-yellow-600">
+                                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                                    </a>
+                                    {{ include('gift_list/_delete_form.html.twig') }}
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="9" class="text-center px-4 py-4">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

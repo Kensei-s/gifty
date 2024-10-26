@@ -1,0 +1,29 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Nouveau Cadeau{% endblock %}
+
+{% block body %}
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <h1 class="text-2xl font-bold text-center mb-6">
+                Ajouter un nouveau cadeau à
+                {% if giftList.title is defined %}
+                    "{{ giftList.title }}"
+                {% else %}
+                    "Sans nom"
+                {% endif %}
+                Liste de cadeaux
+            </h1>
+
+            <!-- Inclusion du formulaire -->
+            {{ include('gift/_form.html.twig') }}
+
+            <!-- Bouton retour à la liste -->
+            <div class="text-center mt-6">
+                <a href="{{ path('app_gift_list_show', {id : listGift_id }) }}" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white font-semibold rounded-lg shadow hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Retour à la liste
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

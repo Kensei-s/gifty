@@ -1,0 +1,58 @@
+{% extends 'template.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        .password-field-div {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}Modifier la liste de cadeaux{% endblock %}
+
+{% block body %}
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <h1 class="text-3xl font-bold text-center mb-6">Modifier la liste de cadeaux</h1>
+
+            <!-- Formulaire d'édition -->
+            {{ include('gift_list/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+            <!-- Bouton retour à la liste -->
+            <div class="text-center mt-6">
+                <a href="{{ path('app_gift_list_index') }}" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white font-semibold rounded-lg shadow hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Retour à la liste
+                </a>
+            </div>
+
+            <!-- Bouton de suppression -->
+            <div class="text-center mt-4">
+                {{ include('gift_list/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusCheckbox = document.getElementById('gift_list_status');
+            const passwordDiv = document.getElementById('gift_list_password').closest('.mb-3');
+
+            // Masquer ou afficher le champ mot de passe en fonction de l'état de la checkbox "status"
+            if (!statusCheckbox.checked) {
+                passwordDiv.classList.add('password-field-div');
+            } else {
+                passwordDiv.classList.remove('password-field-div');
+            }
+
+            statusCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    passwordDiv.classList.remove('password-field-div');
+                } else {
+                    passwordDiv.classList.add('password-field-div');
+                }
+            });
+        });
+    </script>
+{% endblock %}

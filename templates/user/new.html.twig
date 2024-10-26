@@ -1,0 +1,21 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Créer un nouvel utilisateur{% endblock %}
+
+{% block body %}
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <h1 class="text-2xl font-bold text-center mb-6">Créer un nouvel utilisateur</h1>
+
+            <!-- Formulaire de création d'utilisateur -->
+            {{ include('user/_form.html.twig') }}
+
+            <!-- Bouton retour à la liste -->
+            <div class="text-center mt-6">
+                <a href="{{ path('app_user_index') }}" class="inline-flex items-center px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg shadow hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
+                    Retour à la liste
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

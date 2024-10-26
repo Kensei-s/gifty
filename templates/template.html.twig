@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+		<meta name="description" content=""/>
+		<meta name="author" content=""/>
+		<title>
+			{% block title %}Template Title
+			{% endblock %}
+		</title>
+		<link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet"/>
+		<link href="{{ asset('assets/css/myStyle.css') }}" rel="stylesheet"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css">
+		<link
+		rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+		<!-- Styles Tailwind -->
+		<script src="https://cdn.tailwindcss.com"></script>
+
+		<style>
+			/* Tailwind custom config for primary and secondary colors */
+			@layer base{:root {
+				--primary-color: #1e3a8a; /* Navy Blue */
+				--secondary-color: #1e293b; /* Darker Blue */
+			}
+		}
+
+		body {
+			background-color: white; /* Corps de la page */
+			color: black; /* Police noire */
+			font-family: 'Poppins', sans-serif;
+		}
+		</style>
+
+		<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+	</head>
+	<body
+		class="bg-white text-black">
+		<!-- Navbar -->
+		<nav class="bg-blue-900 text-white px-4 py-2 shadow-lg">
+			<div
+				class="container mx-auto flex justify-between items-center">
+				<!-- Navbar Brand-->
+				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+					<a class="font-bold text-xl" href="{{ path('app_gift_list_index') }}">Gifty</a>
+					{#				<a class="navbar-brand ps-3" href="{{ path('personne.list.alls') }}">Giftist Manager</a>#}
+				{% else  %}
+					<a class="font-bold text-xl" href="#">Gifty</a>
+				{% endif  %}
+
+				<ul class="flex space-x-6">
+					<li class="relative">
+						<ul class="flex space-x-6" aria-labelledby="navbarDropdown">
+							{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+								{% if is_granted('ROLE_ADMIN') %}
+									<li>
+										<a class="block px-4 py-2 hover:bg-blue-100" href="{{ path('app_user_index') }}">Page Admin</a>
+									</li>
+								{% endif %}
+
+								<li>
+									<a class="block px-4 py-2 hover:bg-blue-100" href="{{ path('app.user.update-profile', {id : app.user.id}) }}">Profil</a>
+								</li>
+								<li>
+									<a class="block px-4 py-2 hover:bg-blue-100" href="{{ path('app.user.update-password', {id : app.user.id }) }}">Changer Mot de passe</a>
+								</li>
+								<li>
+									<a class="block px-4 py-2 hover:bg-blue-100" href="{{ path('app_logout') }}">Deconnexion</a>
+								</li>
+							{% else %}
+								<li>
+									<a class="block px-4 py-2 hover:bg-blue-100" href="{{ path('app_login') }}">Connexion</a>
+								</li>
+								<li><hr class="dropdown-divider"/></li>
+								<li>
+									<a class="block px-4 py-2 hover:bg-blue-100" href="{{ path('app_register') }}">Inscription</a>
+								</li>
+							{% endif %}
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+
+		<div id="layoutSidenav" class="container mx-auto mt-8">
+			{% if is_granted('IS_AUTHENTICATED_FULLY') %}{#				<div id="layoutSidenav_nav">#}
+				{#					<nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">#}
+				{#						<div class="sb-sidenav-menu">#}
+				{#							<div class="nav">#}
+
+				{#								<div class="sb-sidenav-menu-heading">Pages</div>#}
+				{#								{% if is_granted("ROLE_ADMIN") %}#}
+				{#									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">#}
+				{#										<div class="sb-nav-link-icon">#}
+				{#											<i class="fas fa-columns"></i>#}
+				{#										</div>#}
+				{#										Users#}
+				{#										<div class="sb-sidenav-collapse-arrow">#}
+				{#											<i class="fas fa-angle-down"></i>#}
+				{#										</div>#}
+				{#									</a>#}
+				{#									<div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">#}
+				{#										<nav class="sb-sidenav-menu-nested nav">#}
+				{#											<a class="nav-link" href="{{ path('app_user_index') }}">User Management</a>#}
+				{#										</nav>#}
+				{#									</div>#}
+				{#								{% endif %}#}
+				{#								<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">#}
+				{#									<div class="sb-nav-link-icon">#}
+				{#										<i class="fas fa-book-open"></i>#}
+				{#									</div>#}
+				{#									Gift lists#}
+				{#									<div class="sb-sidenav-collapse-arrow">#}
+				{#										<i class="fas fa-angle-down"></i>#}
+				{#									</div>#}
+				{#								</a>#}
+				{#								<div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">#}
+				{#									<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">#}
+				{#										<a class="nav-link" href="{{path('app_gift_list_index') }}">#}
+				{#											My Gift lists#}
+				{#										</a>#}
+
+
+				{#										<a class="nav-link collapsed" href="{{path('app_gift_list_new') }}"> Create a new Gift list#}
+				{#										</a>#}
+
+
+				{#									</nav>#}
+				{#								</div>#}
+
+				{#							</div>#}
+				{#						</div>#}
+
+				{#						<div class="sb-sidenav-footer">#}
+				{#							<div class="small">Logged in as:</div>#}
+				{#							{% if app.user  %}#}
+				{#								{{ app.user.email }}#}
+				{#							{% else %}#}
+				{#								Anonymous#}
+				{#							{% endif  %}#}
+				{#						</div>#}
+
+				{#					</nav>#}
+				{#				</div>#}
+			{% endif %}
+			<div id="layoutSidenav_content" class="w-3/4">
+				<main>
+					<div class="container-fluid px-4">
+						<h1 class="text-3xl font-bold mb-6"> {% block PageTitle %}{% endblock %}</h1>
+							<div class="card mb-4">
+								<div class="card-body">
+									{% block body %}
+										Template body
+									{% endblock %}
+								</div>
+							</div>
+						</div>
+					</main>
+				</div>
+			</div>
+			<!-- Footer -->
+			<footer class="bg-blue-900 text-white text-center py-4 mt-8">
+				<div class="container">
+					<p>&copy;
+						{{ "now"|date("Y") }}
+						Challenge Rattrapage du 26/10.</p>
+					<a href="#" class="hover:underline">Privacy Policy</a>
+					&middot;
+					<a href="#" class="hover:underline">Terms & Conditions</a>
+				</div>
+			</footer>
+		</body>
+	</html>
+</div></body></html></div><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script><script src="{{ asset('assets/js/scripts.js') }}"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>{% block javascripts %}<script>toastr.options = {
+"closeButton": true,
+"progressBar": true,
+"positionClass": "toast-top-right",
+"showDuration": "300",
+"hideDuration": "1000",
+"timeOut": "5000",
+"extendedTimeOut": "1000",
+"showEasing": "swing",
+"hideEasing": "linear",
+"showMethod": "fadeIn",
+"hideMethod": "fadeOut",
+"className": "toast"
+};{% for message in app.session.flashBag.get('info') %}toastr.info('{{ message|e('js') }}');{% endfor %}{% for message in app.session.flashBag.get('success') %}toastr.success('{{ message|e('js') }}');{% endfor %}{% for message in app.session.flashBag.get('error') %}toastr.error('{{ message|e('js') }}');{% endfor %}</script>{% endblock %}</body></html>

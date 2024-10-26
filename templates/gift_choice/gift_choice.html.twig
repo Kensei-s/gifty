@@ -1,0 +1,30 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Choisir un cadeau{% endblock %}
+
+{% block body %}
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <h1 class="text-2xl font-bold text-center mb-6">Choisir un cadeau</h1>
+            <h2 class="text-lg text-center mb-4">Liste de cadeaux : {{ giftList.title }}</h2>
+
+            {% if form.gift.vars.choices|length > 0 %}
+                <!-- Formulaire de choix du cadeau -->
+                <form action="{{ path('gift_choice', {listGiftId: giftList.id}) }}" method="post">
+                    <div class="space-y-4">
+                        {{ form_widget(form) }}
+                    </div>
+
+                    <!-- Bouton de soumission -->
+                    <div class="text-center mt-6">
+                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white font-semibold rounded-lg shadow hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Choisir ce cadeau
+                        </button>
+                    </div>
+                </form>
+            {% else %}
+                <p class="text-center text-gray-500">Désolé, tous les cadeaux de cette liste ont déjà été choisis !</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

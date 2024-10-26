@@ -1,0 +1,41 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Liste des Cadeaux{% endblock %}
+
+{% block body %}
+    <h1>Liste des Cadeaux</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Image</th>
+                <th>Lien d'achat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gift in gifts %}
+            <tr>
+                <td>{{ gift.id }}</td>
+                <td>{{ gift.name }}</td>
+                <td>{{ gift.price }}</td>
+                <td>{{ gift.image }}</td>
+                <td>{{ gift.purchaseLink }}</td>
+                <td>
+                    <a href="{{ path('app_gift_show', {'id': gift.id}) }}">voir</a>
+                    <a href="{{ path('app_gift_edit', {'id': gift.id}) }}">modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_gift_new') }}">Créer un nouveau</a>
+{% endblock %}

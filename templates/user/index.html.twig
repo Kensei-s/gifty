@@ -1,0 +1,94 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <h1 class="text-3xl font-bold mb-6">Gestion des utilisateurs</h1>
+
+        <!-- Bouton de création d'un nouvel utilisateur -->
+        <div class="mb-4">
+            <a href="{{ path('app_user_new') }}" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white font-semibold rounded-lg shadow hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Créer un nouvel utilisateur
+                <i class="fa-solid fa-square-plus fa-xl ml-2"></i>
+            </a>
+        </div>
+
+        <!-- Tableau des utilisateurs -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 text-left">ID</th>
+                        <th class="px-4 py-2 text-left">Prénom</th>
+                        <th class="px-4 py-2 text-left">Nom</th>
+                        <th class="px-4 py-2 text-left">Email</th>
+                        <th class="px-4 py-2 text-left">Vérifié</th>
+                        <th class="px-4 py-2 text-left">Image</th>
+                        <th class="px-4 py-2 text-left">Créé le</th>
+                        <th class="px-4 py-2 text-left">Modifié le</th>
+                        <th class="px-4 py-2 text-left">Rôles</th>
+                        <th class="px-4 py-2 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                    {% for user in users %}
+                        <tr>
+                            <td class="px-4 py-2">{{ user.id }}</td>
+                            <td class="px-4 py-2">{{ user.firstname | default('N/A') }}</td>
+                            <td class="px-4 py-2">{{ user.lastname | default('N/A') }}</td>
+                            <td class="px-4 py-2">{{ user.email }}</td>
+                            <td class="px-4 py-2">{{ user.isVerified ? 'Oui' : 'Non' }}</td>
+                            <td class="px-4 py-2">
+                                {% if user.image %}
+                                    <img src="{{ asset('uploads/personnes/' ~ user.image) }}" alt="Image de profil" class="h-10 w-10 rounded-full object-cover">
+                                {% else %}
+                                    <i class="fas fa-user fa-lg text-gray-500"></i>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-2">{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                            <td class="px-4 py-2">{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                            <td class="px-4 py-2">{{ user.roles | readableRoles }}</td>
+                            <td class="px-4 py-2">
+                                <div class="flex space-x-2">
+                                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="text-blue-600 hover:text-blue-900">
+                                        <i class="fa-solid fa-circle-info fa-xl"></i>
+                                    </a>
+                                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="text-yellow-500 hover:text-yellow-600">
+                                        <i class="fa-solid fa-user-pen fa-xl"></i>
+                                    </a>
+                                    {{ include('user/_delete_form.html.twig') }}
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="10" class="text-center text-gray-500 py-4">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if isPaginated is defined and isPaginated %}
+            <nav aria-label="Pagination" class="mt-6">
+                <ul class="pagination flex justify-center space-x-2">
+                    {% if page != 1 %}
+                        <li><a class="page-link px-3 py-1 bg-gray-200 rounded" href="{{ path('app_user_index', {'page': page - 1, 'nbre': nbre}) }}">Précédent</a></li>
+                    {% endif %}
+
+                    {% for i in 1..nbPage %}
+                        <li>
+                            <a class="page-link px-3 py-1 bg-gray-200 rounded {{ page == i ? 'bg-blue-900 text-white' : '' }}" href="{{ path('app_user_index', {'page': i, 'nbre': nbre}) }}">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+
+                    {% if page != nbPage %}
+                        <li><a class="page-link px-3 py-1 bg-gray-200 rounded" href="{{ path('app_user_index', {'page': page + 1, 'nbre': nbre}) }}">Suivant</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+{% endblock %}

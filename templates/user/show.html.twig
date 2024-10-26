@@ -1,0 +1,83 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Utilisateur{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <h1 class="text-2xl font-bold text-center mb-6">
+            {% if user.firstname and user.lastname %}
+                {{ [user.firstname, user.lastname]|join(' ') }}
+            {% else %}
+                Utilisateur avec l'ID : {{ user.id }}
+            {% endif %}
+        </h1>
+
+        <!-- Tableau des détails de l'utilisateur -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                <tbody class="text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-left bg-gray-100">ID</th>
+                        <td class="px-4 py-2">{{ user.id }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left bg-gray-100">Prénom</th>
+                        <td class="px-4 py-2">{{ user.firstname | default('N/A') }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left bg-gray-100">Nom</th>
+                        <td class="px-4 py-2">{{ user.lastname | default('N/A') }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left bg-gray-100">Email</th>
+                        <td class="px-4 py-2">{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left bg-gray-100">Vérifié</th>
+                        <td class="px-4 py-2">{{ user.isVerified ? 'Oui' : 'Non' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left bg-gray-100">Image</th>
+                        <td class="px-4 py-2">
+                            {% if user.image %}
+                                <img src="{{ asset('uploads/personnes/' ~ user.image) }}" alt="Image de profil" class="h-10 w-10 rounded-full object-cover">
+                            {% else %}
+                                <i class="fas fa-user fa-lg text-gray-500"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left bg-gray-100">Créé le</th>
+                        <td class="px-4 py-2">{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left bg-gray-100">Modifié le</th>
+                        <td class="px-4 py-2">{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left bg-gray-100">Rôles</th>
+                        <td class="px-4 py-2">{{ user.roles | readableRoles }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Boutons d'action -->
+        <div class="flex justify-center space-x-4 mt-6">
+            <!-- Retour à la liste -->
+            <a href="{{ path('app_user_index') }}" class="text-blue-600 hover:text-blue-900">
+                <i class="fa-solid fa-list fa-xl"></i>
+            </a>
+
+            <!-- Éditer l'utilisateur -->
+            <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="text-yellow-500 hover:text-yellow-600">
+                <i class="fa-solid fa-user-pen fa-xl"></i>
+            </a>
+
+            <!-- Supprimer l'utilisateur -->
+            <a href="{{ path('app_user_delete', {'id': user.id}) }}" class="text-red-600 hover:text-red-800">
+                <i class="fa-solid fa-user-xmark fa-xl"></i>
+            </a>
+        </div>
+    </div>
+{% endblock %}

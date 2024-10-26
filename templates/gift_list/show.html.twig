@@ -1,0 +1,113 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Liste de cadeaux{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <h1 class="text-3xl font-bold mb-6">Détails de la liste de cadeaux</h1>
+
+        <!-- Bouton pour ajouter un cadeau -->
+        <a href="{{ path('app_gift_new', {'listGift_id': gift_list.id}) }}" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white font-semibold rounded-lg shadow hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-4">
+            Ajouter un cadeau
+            <i class="fa-solid fa-square-plus fa-lg ml-2"></i>
+        </a>
+
+        <!-- Bouton pour partager le lien -->
+        <button id="copyButton" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white font-semibold rounded-lg shadow hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-4"
+                data-clipboard-text="http://127.0.0.1:8000/gift-choice/{{ gift_list.id }}">
+            Partager le lien
+            <i class="fa-solid fa-share ml-2"></i>
+        </button>
+
+        <!-- Tableau des détails de la liste de cadeaux -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                <tbody class="text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-left">Titre</th>
+                        <td class="px-4 py-2">{{ gift_list.title }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left">Description</th>
+                        <td class="px-4 py-2">{{ gift_list.description }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left">Statut</th>
+                        <td class="px-4 py-2">{{ gift_list.status ? 'Privé' : 'Public' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left">Mot de passe</th>
+                        <td class="px-4 py-2">{{ gift_list.password ? '*****' : 'Aucun' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left">Date de début</th>
+                        <td class="px-4 py-2">{{ gift_list.beginDate ? gift_list.beginDate|date('Y-m-d') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left">Date de fin</th>
+                        <td class="px-4 py-2">{{ gift_list.endDate ? gift_list.endDate|date('Y-m-d') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left">Thème</th>
+                        <td class="px-4 py-2">{{ gift_list.theme }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left">Nombre de cadeaux</th>
+                        <td class="px-4 py-2">{{ gift_list.gifts.count }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2 text-left">Cadeaux</th>
+                        <td class="px-4 py-2">
+                            <ul class="gift-list space-y-2">
+                                {% for gift in gift_list.gifts %}
+                                    <li class="flex items-center space-x-4">
+                                        {% if gift.image is null or gift.image == '' %}
+                                            <i class="fa-solid fa-gift fa-lg text-gray-500"></i>
+                                        {% elseif gift.image starts with 'http' %}
+                                            <img src="{{ gift.image }}" alt="Image du cadeau" class="h-10 w-10 rounded-full object-cover">
+                                        {% else %}
+                                            {% if app.environment == 'prod' %}
+                                                <img src="https://challange-esgi.s3.eu-central-1.amazonaws.com/gifts/{{ gift.image }}" alt="Image du cadeau" class="h-10 w-10 rounded-full object-cover">
+                                            {% else %}
+                                                <img src="{{ asset('uploads/gifts/' ~ gift.image) }}" alt="Image du cadeau" class="h-10 w-10 rounded-full object-cover">
+                                            {% endif %}
+                                        {% endif %}
+                                        <span>{{ gift.name }} - {{ gift.price }}€ <a href="{{ gift.purchaseLink }}" class="text-blue-600 hover:underline">Lien</a></span>
+
+                                        <a href="{{ path('app_gift_edit', {'id': gift.id}) }}" class="text-yellow-500 hover:text-yellow-600">
+                                            <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                                        </a>
+
+                                        {{ include('gift/_delete_form.html.twig') }}
+                                    </li>
+                                {% else %}
+                                    <p>Pas encore de cadeaux</p>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Actions supplémentaires -->
+        <div class="flex space-x-4 mt-6">
+            <a href="{{ path('app_gift_list_index') }}" class="text-blue-600 hover:text-blue-900">
+                <i class="fa-solid fa-list fa-lg"></i>
+            </a>
+            <a href="{{ path('app_gift_list_edit', {'id': gift_list.id}) }}" class="text-yellow-500 hover:text-yellow-600">
+                <i class="fa-solid fa-pen-to-square fa-lg"></i>
+            </a>
+            {{ include('gift_list/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function (event) {
+            const clipboardText = event.target.getAttribute('data-clipboard-text');
+            alert(`Veuillez copier ce lien et le partager avec vos amis : ${clipboardText}`);
+        });
+    </script>
+{% endblock %}
